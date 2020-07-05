@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="10"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".Activity.TestActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:title="Tập luyện"
+        android:background="@color/mauhong"
+        app:titleTextColor="@color/mautrang"/>
+
+
+    <ImageView
+        android:id="@+id/imgHinh"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:src="@drawable/dt1"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"/>
+
+    <Button
+        android:id="@+id/btnBatDau"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="40dp"
+        android:text="Bắt đầu"
+        android:textColor="@color/mautrang"
+        android:background="@drawable/custom_border_button"/>
+
+
+
+
+</LinearLayout>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <RadioGroup
+        android:id="@+id/rgDanhMuc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <RadioButton
+            android:id="@+id/rdTTNu"
+            android:checked="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Thời trang nữ"/>
+        <RadioButton
+            android:id="@+id/rdTTNam"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Thời trang nam"/>
+        <RadioButton
+            android:id="@+id/rdSKLD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text='Sức khỏe Làm đẹp'/>
+        <RadioButton
+            android:id="@+id/rdDHTS"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Đồng hồ Trang sức"/>
+        <RadioButton
+            android:id="@+id/rdTTTH"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Thời trang thương hiệu"/>
+        <RadioButton
+            android:id="@+id/rdTTTL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Thể thao Tập luyện"/>
+        <RadioButton
+            android:id="@+id/rdPKTT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Phụ kiện thời trang"/>
+        <RadioButton
+            android:id="@+id/rdSPKhac"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sản phẩm khác"/>
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+        <Button
+            android:id="@+id/btnXacNhan"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/custom_border_vientron_bg_hong"
+            android:text="Xác nhận"
+            android:textColor="@color/mautrang"
+            android:textAllCaps="false"
+            android:layout_margin="10dp"
+            />
+        <Button
+            android:id="@+id/btnHuy"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/custom_button_vientron_maufb"
+            android:text="Hủy"
+            android:textColor="@color/colorFacebook"
+            android:textAllCaps="false"
+            android:layout_margin="10dp"
+            />
+    </LinearLayout>
+
+
+
+</LinearLayout>

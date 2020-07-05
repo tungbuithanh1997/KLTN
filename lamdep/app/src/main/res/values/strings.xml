@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Takada</string>
+    <string name="open">Mở</string>
+    <string name="close">Đóng</string>
+
+    <string name="giaspchuakm"> Not crossed <strike> crossed </strike> </string>
+
+    <string name="facebook_app_id">545586109669549</string>
+    <string name="fb_login_protocol_scheme">fb545586109669549</string>
+
+    <string name="debietthemchitietdonhang">Để biết thêm chi tiết về trạng thái đơn hàng của bạn
+        vui lòng click vào <b>Chi tiết đơn hàng</b> ở phía dưới hoặc vào <b>Tài khoản > Đơn hàng của tôi</b></string>
+
+</resources>

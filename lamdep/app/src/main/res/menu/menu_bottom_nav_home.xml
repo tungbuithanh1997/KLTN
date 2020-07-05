@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/itTrangChu"
+        android:title="Trang chủ"
+        android:icon="@drawable/ic_home_black_24dp"
+        />
+
+    <item android:id="@+id/itDanhMuc"
+        android:title="Danh mục"
+        android:icon="@drawable/ic_category_black"
+        />
+
+    <item android:id="@+id/itLamDep"
+        android:title="Bài viết"
+        android:icon="@drawable/ic_write_24dp_black"
+        />
+
+    <item android:id="@+id/itTimKiem"
+        android:title="Tìm kiếm"
+        android:icon="@drawable/ic_search_black_24dp"
+        />
+
+    <item android:id="@+id/itTaiKhoan"
+        android:title="Tài khoản"
+        android:icon="@drawable/ic_account_circle_black_24dp"
+        />
+
+</menu>

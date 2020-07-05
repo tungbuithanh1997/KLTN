@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "838518398653",
+    "firebase_url": "https://appchat-19728.firebaseio.com",
+    "project_id": "appchat-19728",
+    "storage_bucket": "appchat-19728.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:838518398653:android:db3660dc496b1dc2d3a1d4",
+        "android_client_info": {
+          "package_name": "ducthuan.com.lamdep"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "838518398653-mndud1shkh6a4jlp0nt3r08njpl9d0c3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZRqcvb5JdtMof2h69goNkARAYGThzvpc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "838518398653-mndud1shkh6a4jlp0nt3r08njpl9d0c3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

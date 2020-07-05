@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <RadioButton
+            android:id="@+id/rdThanhToanKhiNhanHang"
+            android:checked="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Thanh toán khi nhận hàng"/>
+        <RadioButton
+            android:id="@+id/rdChuyenKhoan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Chuyển khoản"/>
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnDongYThanhToan"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Đồng ý"
+        android:textColor="@color/mautrang"
+        android:textAllCaps="false"
+        android:layout_margin="10dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/custom_border_button"/>
+
+</LinearLayout>
