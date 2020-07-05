@@ -5,7 +5,7 @@
   <version>0.0.1-SNAPSHOT</version>
   	<properties>
     <dropwizard.version>1.0.2</dropwizard.version>
-    <jackson.version>2.8.8</jackson.version>
+    <jackson.version>2.11.1</jackson.version>
     <spark-version>2.4.0</spark-version>
     <scala-library.version>2.12.10</scala-library.version>
     <maven-shade-plugin.version>2.3</maven-shade-plugin.version>
