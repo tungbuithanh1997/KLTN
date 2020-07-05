@@ -1,0 +1,6 @@
+DropWizard\RecommendController.class
+DropWizard\RecommendServerConfiguration.class
+DropWizard\Server.class
+Recommend\UserRating.class
+Recommend\DatabaseConfig.class
+Recommend\RecommendationSpark.class
