@@ -13,7 +13,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import ducthuan.com.lamdep.Activity.DangNhapActivity;
 import ducthuan.com.lamdep.R;
@@ -25,6 +36,12 @@ import retrofit2.Response;
 
 public class Fragment_DangKy extends Fragment {
 
+
+    FirebaseAuth firebaseAuth;
+    DatabaseReference databaseReference;
+
+
+
     TextInputLayout txtTenDangKy, txtEmailDangKy, txtMatKhauDangky;
     Button btnDangKy;
 
@@ -35,7 +52,6 @@ public class Fragment_DangKy extends Fragment {
         view = inflater.inflate(R.layout.fragment_dang_ky, container, false);
 
         AnhXa();
-        Init();
         addEvents();
 
         return view;
@@ -48,11 +64,38 @@ public class Fragment_DangKy extends Fragment {
                 if(!kiemTraEmail() | !kiemTraPassword() | !kiemTraUsername()){
                     return;
                 }
-                DataService dataService = APIService.getService();
-                String name = txtTenDangKy.getEditText().getText().toString();
-                String email = txtEmailDangKy.getEditText().getText().toString();
+
+                final String name = txtTenDangKy.getEditText().getText().toString();
+                final String email = txtEmailDangKy.getEditText().getText().toString();
                 String matkhau = txtMatKhauDangky.getEditText().getText().toString();
 
+                firebaseAuth = FirebaseAuth.getInstance();
+                firebaseAuth.createUserWithEmailAndPassword(email,matkhau).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseAuth.getUid());
+                            Map<String,Object>map = new HashMap<>();
+                            map.put("id",firebaseAuth.getUid());
+                            map.put("name",name);
+                            map.put("email",email);
+                            map.put("status","offline");
+                            databaseReference.setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+                                        Log.d("kiemtra",task.toString());
+                                    }
+
+                                }
+                            });
+                        }
+
+                    }
+                });
+
+
+                DataService dataService = APIService.getService();
                 Call<String>callback = dataService.kiemTraDangKy(name,email,matkhau);
                 callback.enqueue(new Callback<String>() {
                     @Override
@@ -78,9 +121,7 @@ public class Fragment_DangKy extends Fragment {
         });
     }
 
-    private void Init() {
 
-    }
 
     private void AnhXa() {
         txtTenDangKy = view.findViewById(R.id.txtTenDangKy);

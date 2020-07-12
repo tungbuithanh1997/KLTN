@@ -22,11 +22,19 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import ducthuan.com.lamdep.Activity.ChatsActivity;
 import ducthuan.com.lamdep.Activity.DangNhapActivity;
 import ducthuan.com.lamdep.Activity.DanhGiaCuaToiActivity;
 import ducthuan.com.lamdep.Activity.GioHangActivity;
@@ -36,6 +44,7 @@ import ducthuan.com.lamdep.Activity.SanPhamYeuThichActivity;
 import ducthuan.com.lamdep.Activity.ShopCuaToiActivity;
 import ducthuan.com.lamdep.Activity.ThongTinTaiKhoanActivity;
 import ducthuan.com.lamdep.Activity.TrangChuActivity;
+import ducthuan.com.lamdep.Model.Chat;
 import ducthuan.com.lamdep.Model.NhanVien;
 import ducthuan.com.lamdep.R;
 import ducthuan.com.lamdep.Service.APIService;
@@ -49,8 +58,11 @@ public class Fragment_Tab_TaiKhoan extends Fragment {
     Toolbar toolbar;
 
     SharedPreferences sharedPreferences;
-    TextView txtGioHang;
+    TextView txtGioHang,txtMessage;
     ArrayList<NhanVien>nhanViens;
+
+    DatabaseReference databaseReference;
+    FirebaseUser firebaseUser;
 
     boolean onpause = false;
 
@@ -92,6 +104,7 @@ public class Fragment_Tab_TaiKhoan extends Fragment {
                     editor.putString("manv", "");
                     editor.commit();
                 }
+                FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(getActivity(), TrangChuActivity.class));
             }
         });
@@ -193,6 +206,8 @@ public class Fragment_Tab_TaiKhoan extends Fragment {
         txtDanhGiaCuaToi = view.findViewById(R.id.txtDanhGiaCuaToi);
         imgHinhNV = view.findViewById(R.id.imgHinhNV);
 
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
         sharedPreferences = getActivity().getSharedPreferences("dangnhap",Context.MODE_PRIVATE);
@@ -292,6 +307,66 @@ public class Fragment_Tab_TaiKhoan extends Fragment {
                 }
             }
         });
+
+        MenuItem itMessage = menu.findItem(R.id.itMessage);
+        View viewMessage = MenuItemCompat.getActionView(itMessage);
+        txtMessage = viewMessage.findViewById(R.id.txtSoLuongMSG);
+        getDataMessage(txtMessage);
+
+        viewMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sharedPreferences = getActivity().getSharedPreferences("dangnhap", Context.MODE_PRIVATE);
+                String manv= sharedPreferences.getString("manv","");
+                if(manv.equals("")){
+                    startActivity(new Intent(getActivity(), DangNhapActivity.class));
+                }else {
+                    Intent intent = new Intent(getActivity(), ChatsActivity.class);
+                    startActivity(intent);
+                }
+
+            }
+        });
+
+    }
+
+    private void getDataMessage(final TextView txtMessage) {
+        sharedPreferences = getActivity().getSharedPreferences("dangnhap", Context.MODE_PRIVATE);
+        String manv = sharedPreferences.getString("manv", "");
+        if (manv.equals("")) {
+            txtMessage.setVisibility(View.GONE);
+        } else {
+
+            databaseReference = FirebaseDatabase.getInstance().getReference("Chats");
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(firebaseUser!=null){
+                        int temp = 0;
+                        for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                            Chat chat = snapshot.getValue(Chat.class);
+                            if(chat.isSeen() == false && chat.getReceiver().equals(firebaseUser.getUid())){
+                                temp++;
+                            }
+                        }
+                        if(temp==0){
+                            txtMessage.setVisibility(View.GONE);
+                        }else {
+                            txtMessage.setVisibility(View.VISIBLE);
+                            txtMessage.setText(temp+"");
+                        }
+                    }
+
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+        }
     }
 
     @Override

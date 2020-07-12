@@ -15,8 +15,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.ShowHinhSanPhamActivity"
-            ></activity>
+        <activity android:name=".Activity.ChatsActivity"></activity>
+        <activity android:name=".Activity.ChatActivity" />
+        <activity android:name=".Activity.ShowHinhSanPhamActivity" />
         <activity android:name=".Adapter.TapLuyenActivity" />
         <activity android:name=".Activity.LoaiTapLuyenActivity" />
         <activity android:name=".Activity.BaiVietLamDepLuuTruActivity" />
@@ -42,7 +43,9 @@
         <activity android:name=".Activity.DonMuaActivity" />
         <activity android:name=".Activity.ThongTinTaiKhoanActivity" />
         <activity android:name=".Activity.DatHangThanhCongActivity" />
-        <activity android:name=".Activity.TestActivity" />
+        <activity android:name=".Activity.TestActivity" >
+
+        </activity>
         <activity android:name=".Activity.DiaChiActivity" />
         <activity android:name=".Activity.XacNhanThongTinMuaHangActivity" />
         <activity android:name=".Activity.DiaChiNhanHangActivity" />

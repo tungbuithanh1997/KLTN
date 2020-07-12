@@ -2,6 +2,7 @@ package ducthuan.com.lamdep.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Notification;
@@ -10,37 +11,21 @@ import android.app.NotificationManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 
-import android.os.CountDownTimer;
 import android.view.View;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+import ducthuan.com.lamdep.Adapter.BaiVietAdapter;
+import ducthuan.com.lamdep.Model.BaiViet;
 import ducthuan.com.lamdep.R;
 
 
 public class TestActivity extends AppCompatActivity{
     Toolbar toolbar;
-
-    ImageView imgHinh;
-    Button btnBatDau;
-
-    boolean batdau = true;
-
-    ArrayList<Integer>dsHinh;
-    int vitri = 0;
-
-    CountDownTimer countDownTimer;
-
-    MediaPlayer mediaPlayer;
+    RecyclerView rv1,rv2;
+    public static BaiVietAdapter baiVietAdapter;
+    public static ArrayList<BaiViet>baiViets;
 
 
     @Override
@@ -62,61 +47,38 @@ public class TestActivity extends AppCompatActivity{
         });
 
 
-        btnBatDau.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-
-                if(batdau){
-                    btnBatDau.setText("Dừng lại");
-                    batdau = false;
-                    mediaPlayer.start();
-                    countDownTimer.start();
-
-
-                }else {
-                    btnBatDau.setText("Bắt đầu");
-                    countDownTimer.cancel();
-                    batdau = true;
-                }
-            }
-        });
 
     }
 
     private void addControls() {
         toolbar = findViewById(R.id.toolbar);
-        imgHinh = findViewById(R.id.imgHinh);
-        btnBatDau = findViewById(R.id.btnBatDau);
+        rv1 = findViewById(R.id.rv1);
+        rv2 = findViewById(R.id.rv2);
 
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_back_white_24dp);
 
+        baiViets = new ArrayList<>();
+        baiViets.add(new BaiViet(1,R.drawable.ic_tab_skin,"Da đẹp",false));
+        baiViets.add(new BaiViet(2,R.drawable.ic_make_up,"Trang điểm",false));
+        baiViets.add(new BaiViet(3,R.drawable.ic_tab_hair,"Tóc đẹp",false));
+        baiViets.add(new BaiViet(4,R.drawable.ic_tab_style,"Mặc đẹp",false));
+        baiViets.add(new BaiViet(5,R.drawable.ic_tab_workout,"Dáng đẹp",false));
+        baiViets.add(new BaiViet(6,R.drawable.ic_fitness,"Tập luyện",false));
+
+        rv1.setLayoutManager(new LinearLayoutManager(TestActivity.this));
+        rv1.setHasFixedSize(true);
+        rv1.setNestedScrollingEnabled(true);
+
+        baiVietAdapter = new BaiVietAdapter(TestActivity.this,baiViets);
+        rv1.setAdapter(baiVietAdapter);
 
 
-        dsHinh = new ArrayList<>();
-        dsHinh.add(R.drawable.dt1);
-        dsHinh.add(R.drawable.dt2);
 
-        mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.coi);
-        countDownTimer = new CountDownTimer(20000,500) {
-            @Override
-            public void onTick(long l) {
-
-                imgHinh.setImageResource(dsHinh.get(vitri));
-                vitri = vitri + 1;
-
-                if(vitri == dsHinh.size()){
-                    vitri = 0;
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                countDownTimer.start();
-            }
-        };
 
 
     }
+
+
 }

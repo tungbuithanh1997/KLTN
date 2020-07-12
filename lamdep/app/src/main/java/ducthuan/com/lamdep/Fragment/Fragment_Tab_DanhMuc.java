@@ -22,14 +22,24 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import ducthuan.com.lamdep.Activity.ChatsActivity;
 import ducthuan.com.lamdep.Activity.DangNhapActivity;
 import ducthuan.com.lamdep.Activity.GioHangActivity;
 import ducthuan.com.lamdep.Activity.TimKiemTrangChuActivity;
 import ducthuan.com.lamdep.Adapter.DanhMucTabTaiKhoanAdapter;
 import ducthuan.com.lamdep.Adapter.LoaiSanPhamAdapter;
+import ducthuan.com.lamdep.Model.Chat;
 import ducthuan.com.lamdep.Model.LoaiSanPham;
 import ducthuan.com.lamdep.R;
 import ducthuan.com.lamdep.Service.APIService;
@@ -43,6 +53,9 @@ public class Fragment_Tab_DanhMuc extends Fragment {
 
     SharedPreferences sharedPreferences;
 
+    DatabaseReference databaseReference;
+    FirebaseUser firebaseUser;
+
     Toolbar toolbar;
     RecyclerView rvDanhMuc;
     DanhMucTabTaiKhoanAdapter loaiSanPhamAdapter;
@@ -50,7 +63,7 @@ public class Fragment_Tab_DanhMuc extends Fragment {
 
     TextView txtTimKiem;
 
-    TextView txtGioHang;
+    TextView txtGioHang,txtMessage;
     boolean onpause = false;
 
     @Nullable
@@ -111,6 +124,8 @@ public class Fragment_Tab_DanhMuc extends Fragment {
         rvDanhMuc = view.findViewById(R.id.rvDanhMuc);
         txtTimKiem = view.findViewById(R.id.txtTimKiem);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
 
@@ -175,7 +190,66 @@ public class Fragment_Tab_DanhMuc extends Fragment {
             }
         });
 
+        MenuItem itMessage = menu.findItem(R.id.itMessage);
+        View viewMessage = MenuItemCompat.getActionView(itMessage);
+        txtMessage = viewMessage.findViewById(R.id.txtSoLuongMSG);
+        getDataMessage(txtMessage);
 
+        viewMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sharedPreferences = getActivity().getSharedPreferences("dangnhap", Context.MODE_PRIVATE);
+                String manv= sharedPreferences.getString("manv","");
+                if(manv.equals("")){
+                    startActivity(new Intent(getActivity(), DangNhapActivity.class));
+                }else {
+                    Intent intent = new Intent(getActivity(), ChatsActivity.class);
+                    startActivity(intent);
+                }
+
+            }
+        });
+
+
+    }
+
+    private void getDataMessage(final TextView txtMessage) {
+        sharedPreferences = getActivity().getSharedPreferences("dangnhap", Context.MODE_PRIVATE);
+        String manv = sharedPreferences.getString("manv", "");
+        if (manv.equals("")) {
+            txtMessage.setVisibility(View.GONE);
+        } else {
+
+            databaseReference = FirebaseDatabase.getInstance().getReference("Chats");
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    int temp = 0;
+                    for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                        Chat chat = snapshot.getValue(Chat.class);
+                        if(firebaseUser!=null){
+                            if(chat.isSeen() == false && chat.getReceiver().equals(firebaseUser.getUid())){
+                                temp++;
+                            }
+                        }
+
+                    }
+                    if(temp==0){
+                        txtMessage.setVisibility(View.GONE);
+                    }else {
+                        txtMessage.setVisibility(View.VISIBLE);
+                        txtMessage.setText(temp+"");
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+        }
     }
 
     @Override

@@ -119,7 +119,7 @@
             android:layout_toLeftOf="@id/btnMuaHang"
             android:layout_below="@id/txtTextTongTien"
             android:layout_marginRight="10dp"
-            android:text="2.000.000đ"
+            android:text="0đ"
             android:textSize="16sp"
             android:textStyle="bold"/>
 

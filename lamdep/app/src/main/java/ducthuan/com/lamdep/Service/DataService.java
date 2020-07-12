@@ -81,6 +81,11 @@ public interface DataService {
     @POST("getsanphamtheodanhmuc.php")
     Call<List<SanPham>>getThoiTrangNus(@Field("maloaisp") String maloaisp,@Field("limit") int limit);
 
+    //lay danh sach sp co the ban thich
+    @FormUrlEncoded
+    @POST("getspcothebanthich.php")
+    Call<List<SanPham>>getSPCoTheBanThich(@Field("maloaisp") String maloaisp);
+
     //lay danh sach sp theo danh muc ban chay
     @FormUrlEncoded
     @POST("getsanphamtheodanhmucbanchay.php")
@@ -210,6 +215,11 @@ public interface DataService {
     @FormUrlEncoded
     @POST("capnhapluotthichsanpham.php")
     Call<String>capNhapLuotThichSP(@Field("masp") String masp,@Field("manv") String manv);
+
+    //get san pham khac cua shop
+    @FormUrlEncoded
+    @POST("getsanphamkhaccuashop.php")
+    Call<List<SanPham>>getSanPhamKhacCuaShop(@Field("mashop") String mashop);
 
     //Them hoa don
     @FormUrlEncoded

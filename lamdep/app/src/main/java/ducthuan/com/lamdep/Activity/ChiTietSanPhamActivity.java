@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -33,6 +34,12 @@ import android.widget.Toast;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
@@ -43,12 +50,15 @@ import java.util.Locale;
 import java.util.StringTokenizer;
 
 import ducthuan.com.lamdep.Adapter.DanhGiaAdapter;
+import ducthuan.com.lamdep.Adapter.SanPhamGoiYAdapter;
+import ducthuan.com.lamdep.Adapter.SanPhamKhacCuaShopAdapter;
 import ducthuan.com.lamdep.Adapter.SlideViewPagerAdapter;
 import ducthuan.com.lamdep.Model.ChiTietSanPham;
 import ducthuan.com.lamdep.Model.DanhGia;
 import ducthuan.com.lamdep.Model.DiaChiKhachHang;
 import ducthuan.com.lamdep.Model.GioHang;
 import ducthuan.com.lamdep.Model.SanPham;
+import ducthuan.com.lamdep.Model.User;
 import ducthuan.com.lamdep.R;
 import ducthuan.com.lamdep.Service.APIService;
 import ducthuan.com.lamdep.Service.DataService;
@@ -76,23 +86,32 @@ public class ChiTietSanPhamActivity extends AppCompatActivity {
     ImageView imgYeuThich, imXemThemChiTiet;
 
     RecyclerView recyclerDanhGiaChiTiet, rvCoTheBanThich, rvCacSPKhacCuaShop;
+    ArrayList<SanPham>sanPhamKhacShop;
+    SanPhamKhacCuaShopAdapter sanPhamKhacCuaShopAdapter;
+    SanPhamGoiYAdapter sanPhamGoiYAdapter;
+    ArrayList<SanPham>sanPhamCoTheBanThich;
+
     DanhGiaAdapter danhGiaAdapter;
     ArrayList<DanhGia> danhGias;
 
     RatingBar ratingBar;
 
     Button btnMuaNgay,btnXemShop;
-    ImageButton imThemGioHang;
+    ImageButton imThemGioHang,btnChatShop;
 
 
     boolean sochitiet = false;
     SharedPreferences sharedPreferences;
     String kiemtratrangthai = "";
     String tennv = "";
+    String userid = "";
 
     int tongsl = 1;
 
     boolean onpause = false;
+
+    FirebaseUser firebaseUser;
+    DatabaseReference databaseReference;
 
 
     @Override
@@ -101,7 +120,62 @@ public class ChiTietSanPhamActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chi_tiet_san_pham);
         GetIntent();
         addControls();
+        getSanPhamKhacCuaShop();
+        getCoTheBanThich();
         addEvents();
+    }
+
+    private void getCoTheBanThich() {
+
+        sanPhamCoTheBanThich = new ArrayList<>();
+        rvCoTheBanThich.setLayoutManager(new GridLayoutManager(ChiTietSanPhamActivity.this,2,RecyclerView.VERTICAL,false));
+        rvCoTheBanThich.setHasFixedSize(true);
+        rvCoTheBanThich.setNestedScrollingEnabled(true);
+        DataService dataService = APIService.getService();
+        Call<List<SanPham>>call = dataService.getSPCoTheBanThich(sanPham.getMALOAISP());
+        call.enqueue(new Callback<List<SanPham>>() {
+            @Override
+            public void onResponse(Call<List<SanPham>> call, Response<List<SanPham>> response) {
+                sanPhamCoTheBanThich = (ArrayList<SanPham>) response.body();
+                if(sanPhamCoTheBanThich.size()>0){
+                    sanPhamGoiYAdapter = new SanPhamGoiYAdapter(ChiTietSanPhamActivity.this,sanPhamCoTheBanThich);
+                    rvCoTheBanThich.setAdapter(sanPhamGoiYAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<SanPham>> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    private void getSanPhamKhacCuaShop() {
+
+        sanPhamKhacShop = new ArrayList<>();
+        rvCacSPKhacCuaShop.setLayoutManager(new GridLayoutManager(ChiTietSanPhamActivity.this,1,RecyclerView.HORIZONTAL,false));
+        rvCacSPKhacCuaShop.setHasFixedSize(true);
+        rvCacSPKhacCuaShop.setNestedScrollingEnabled(true);
+        DataService dataService = APIService.getService();
+        Call<List<SanPham>>call = dataService.getSanPhamKhacCuaShop(sanPham.getMANV());
+        call.enqueue(new Callback<List<SanPham>>() {
+            @Override
+            public void onResponse(Call<List<SanPham>> call, Response<List<SanPham>> response) {
+                sanPhamKhacShop = (ArrayList<SanPham>) response.body();
+                if(sanPhamKhacShop.size()>0){
+                    sanPhamKhacCuaShopAdapter = new SanPhamKhacCuaShopAdapter(ChiTietSanPhamActivity.this,sanPhamKhacShop);
+                    rvCacSPKhacCuaShop.setAdapter(sanPhamKhacCuaShopAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<SanPham>> call, Throwable t) {
+
+            }
+        });
+
+
     }
 
     private void HienThiThongTinKyThuat() {
@@ -563,6 +637,54 @@ public class ChiTietSanPhamActivity extends AppCompatActivity {
             }
         });
 
+        txtXemThemSanPhamKhac.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ChiTietSanPhamActivity.this,ShopActivity.class);
+                intent.putExtra("tennv",sanPham.getTENNV());
+                startActivity(intent);
+            }
+        });
+
+        btnChatShop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(tennv.equals("")){
+                    startActivity(new Intent(ChiTietSanPhamActivity.this,DangNhapActivity.class));
+                }else {
+
+                    databaseReference = FirebaseDatabase.getInstance().getReference("Users");
+                    databaseReference.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                                User user = snapshot.getValue(User.class);
+                                if(user.getEmail().equals(sanPham.getTENNV())){
+                                    userid = user.getId();
+                                    break;
+                                }
+                            }
+                            Intent intent = new Intent(ChiTietSanPhamActivity.this,ChatActivity.class);
+                            intent.putExtra("userid",userid);
+                            startActivity(intent);
+                            databaseReference.removeEventListener(this);
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+
+                }
+
+            }
+        });
+
     }
 
     private void xuLyMuaNgay() {
@@ -668,6 +790,7 @@ public class ChiTietSanPhamActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         collapsingCTSP = findViewById(R.id.collapsingCTSP);
         btnXemShop = findViewById(R.id.btnXemShop);
+        btnChatShop = findViewById(R.id.btnChatShop);
         //
         txtTenSanPham = findViewById(R.id.txtTenSanPham);
         txtPhanTramKM = findViewById(R.id.txtPhanTramKM);

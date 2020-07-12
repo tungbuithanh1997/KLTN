@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,9 +21,19 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import ducthuan.com.lamdep.Activity.ChatsActivity;
 import ducthuan.com.lamdep.Activity.DangNhapActivity;
 import ducthuan.com.lamdep.Activity.GioHangActivity;
 import ducthuan.com.lamdep.Activity.TimKiemTrangChuActivity;
+import ducthuan.com.lamdep.Model.Chat;
 import ducthuan.com.lamdep.R;
 import ducthuan.com.lamdep.Service.APIService;
 import ducthuan.com.lamdep.Service.DataService;
@@ -35,15 +47,20 @@ public class Fragment_Tab_TrangChu extends Fragment {
     Toolbar toolbarTrangChu;
     SharedPreferences sharedPreferences;
 
+    DatabaseReference databaseReference;
+    FirebaseUser firebaseUser;
+
     TextView txtTimKiem;
 
-    TextView txtGioHang;
+    TextView txtGioHang,txtMessage;
     boolean onpause = false;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_tab_trang_chu,container,false);
+
+
         //if (CheckConnect.haveNetworkConnection(getApplicationContext())) {
         addControls();
         addEvents();
@@ -65,6 +82,8 @@ public class Fragment_Tab_TrangChu extends Fragment {
 
 
         sharedPreferences = getActivity().getSharedPreferences("dangnhap", Context.MODE_PRIVATE);
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
 
 
     }
@@ -141,7 +160,67 @@ public class Fragment_Tab_TrangChu extends Fragment {
             }
         });
 
+        MenuItem itMessage = menu.findItem(R.id.itMessage);
+        View viewMessage = MenuItemCompat.getActionView(itMessage);
+        txtMessage = viewMessage.findViewById(R.id.txtSoLuongMSG);
+        getDataMessage(txtMessage);
 
+       viewMessage.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               sharedPreferences = getActivity().getSharedPreferences("dangnhap", Context.MODE_PRIVATE);
+               String manv= sharedPreferences.getString("manv","");
+               if(manv.equals("")){
+                   startActivity(new Intent(getActivity(), DangNhapActivity.class));
+               }else {
+                   Intent intent = new Intent(getActivity(), ChatsActivity.class);
+                   startActivity(intent);
+               }
+
+           }
+       });
+
+
+
+
+    }
+
+    private void getDataMessage(final TextView txtMessage) {
+        sharedPreferences = getActivity().getSharedPreferences("dangnhap", Context.MODE_PRIVATE);
+        String manv = sharedPreferences.getString("manv", "");
+        if (manv.equals("")) {
+            txtMessage.setVisibility(View.GONE);
+        } else {
+
+            databaseReference = FirebaseDatabase.getInstance().getReference("Chats");
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    int temp = 0;
+                    for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                        Chat chat = snapshot.getValue(Chat.class);
+                        if(firebaseUser!=null){
+                            if(chat.isSeen() == false && chat.getReceiver().equals(firebaseUser.getUid())){
+                                temp++;
+                            }
+                        }
+                    }
+                    if(temp==0){
+                        txtMessage.setVisibility(View.GONE);
+                    }else {
+                        txtMessage.setVisibility(View.VISIBLE);
+                        txtMessage.setText(temp+"");
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+        }
     }
 
 

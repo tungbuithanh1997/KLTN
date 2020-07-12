@@ -39,8 +39,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,6 +66,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Fragment_DangNhap extends Fragment {
+
+    FirebaseAuth auth;
 
     TextInputLayout txtEmailDangNhap,txtMatKhauDangNhap;
     TextView txtQuenMatKhau;
@@ -300,6 +305,20 @@ public class Fragment_DangNhap extends Fragment {
                 String matkhau = txtMatKhauDangNhap.getEditText().getText().toString();
 
                 showProcessDialog();
+
+                auth = FirebaseAuth.getInstance();
+                auth.signInWithEmailAndPassword(email,matkhau).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            Log.d("kiemtradangnhap","OK");
+                        }else {
+                            Log.d("kiemtradangnhap","FAIL");
+                        }
+                    }
+                });
+
+
                 DataService dataService = APIService.getService();
                 Call<List<NhanVien>>callback = dataService.kiemTraDangNhap(email,matkhau);
                 callback.enqueue(new Callback<List<NhanVien>>() {

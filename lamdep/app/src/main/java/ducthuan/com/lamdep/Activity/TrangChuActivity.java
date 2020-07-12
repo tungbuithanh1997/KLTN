@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.widget.FrameLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import ducthuan.com.lamdep.Fragment.Fragment_Tab_DanhMuc;
 import ducthuan.com.lamdep.Fragment.Fragment_Tab_TaiKhoan;
@@ -24,11 +27,11 @@ import ducthuan.com.lamdep.R;
 public class TrangChuActivity extends AppCompatActivity {
 
     public static final String base_url = "https://webt2.000webhostapp.com/webt2/";
-    //public static final String base_url = "http://172.17.16.153/webt2/";
+    //public static final String base_url = "http://172.17.16.153/webt2/";//ktx
     //public static final String base_url = "http://10.45.249.198/webt2/";
     //public static final String base_url = "http://172.17.23.52/webt2/";
-    //public static final String base_url = "http://192.168.70.104/webt2/";
-    //public static final String base_url = "http://192.168.43.56/webt2/";
+    //public static final String base_url = "http://192.168.1.7/webt2/";//kem xoi
+    //public static final String base_url = "http://192.168.43.56/webt2/";//quan cafe vk day them
 
     FrameLayout frameLayout_Content;
     BottomNavigationView bottomNav;
@@ -39,6 +42,8 @@ public class TrangChuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //if (CheckConnect.haveNetworkConnection(getApplicationContext())) {
         setContentView(R.layout.activity_trang_chu);
+
+
         addControls();
         addEvents();
         //getDataSanPhamGoiY();

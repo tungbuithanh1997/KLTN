@@ -3,38 +3,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="10"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Activity.TestActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:title="Tập luyện"
+        app:title="Bài viết"
         android:background="@color/mauhong"
         app:titleTextColor="@color/mautrang"/>
 
-
-    <ImageView
-        android:id="@+id/imgHinh"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:src="@drawable/dt1"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"/>
-
-    <Button
-        android:id="@+id/btnBatDau"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="40dp"
-        android:text="Bắt đầu"
-        android:textColor="@color/mautrang"
-        android:background="@drawable/custom_border_button"/>
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="4">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"/>
+    </LinearLayout>
 
 
 </LinearLayout>
