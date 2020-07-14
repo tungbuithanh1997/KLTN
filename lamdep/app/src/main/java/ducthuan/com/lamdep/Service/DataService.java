@@ -30,6 +30,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 
 public interface DataService {
 
@@ -370,5 +371,8 @@ public interface DataService {
     @FormUrlEncoded
     @POST("getbaivietlamdepluutru.php")
     Call<List<BaiVietLamDep>>getBaiVietLamDepLuuTru(@Field("manv") String manv);
+   
+    @GET("recommend/{id}/{numItem}")
+	 Call<List<SanPham>>getSPGoiYRS(@Path("id") String id, @Path("numItem") String numItem);
 
 }

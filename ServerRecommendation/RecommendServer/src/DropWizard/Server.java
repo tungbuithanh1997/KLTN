@@ -6,6 +6,7 @@ import Recommend.RecommendationSpark;
 import Recommend.ShareLoopGroup;
 import io.dropwizard.setup.Environment;
 import Database.DatabaseUtils;
+import Database.NeighborhoodBased;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,8 @@ public class Server extends io.dropwizard.Application<RecommendServerConfigurati
 		//listId.add(1);
 		//DatabaseUtils.getListSanPhamByListID(listId);
 		
-		initRecommendationSystem();
+		//initRecommendationSystem();
+
 		new Server().run("server", "application.yml");
 	}
 	

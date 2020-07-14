@@ -26,11 +26,11 @@ import ducthuan.com.lamdep.R;
 
 public class TrangChuActivity extends AppCompatActivity {
 
-    public static final String base_url = "https://webt2.000webhostapp.com/webt2/";
+   // public static final String base_url = "https://webt2.000webhostapp.com/webt2/";
     //public static final String base_url = "http://172.17.16.153/webt2/";//ktx
     //public static final String base_url = "http://10.45.249.198/webt2/";
     //public static final String base_url = "http://172.17.23.52/webt2/";
-    //public static final String base_url = "http://192.168.1.7/webt2/";//kem xoi
+    public static final String base_url = "http://192.168.1.5/webt2/";//kem xoi
     //public static final String base_url = "http://192.168.43.56/webt2/";//quan cafe vk day them
 
     FrameLayout frameLayout_Content;

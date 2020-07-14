@@ -1,6 +1,5 @@
 package DropWizard;
 
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -17,55 +16,45 @@ import Recommend.RecommendationSpark;
 import Recommend.SANPHAM;
 import scala.collection.mutable.WrappedArray;
 
-
 @Path("/recommend")
 @Produces(MediaType.APPLICATION_JSON)
 public class RecommendController {
 	private final Validator validator;
-	public RecommendController(Validator validator)
-	{
+
+	public RecommendController(Validator validator) {
 		this.validator = validator;
 	}
+
+	@GET
+	public Response getRatingsPrediction() {
+		//RecommendationSpark.recommendForAllUser(50);
+		return Response.ok("response GET").build();
+	}
+
+	@GET
+	@Path("/{id}")
+	public Response getRatingsPredictionById(@PathParam("id") Integer id) throws SQLException {
+
+		return Response.ok(DatabaseUtils.predictForUserNumItem(id,  10)).build();
+		
+	}
+
+	@GET
+	@Path("/{id}/{numItem}")
+	public Response getRatingsPredictionById(@PathParam("id") Integer id, @PathParam("numItem") Integer numItem)
+			throws SQLException {
 	
-	  @GET
-	    public Response getRatingsPrediction() {
-		    RecommendationSpark.recommendForAllUser(50);
-	        return Response.ok("response GET").build();
-	    }
-	  
-	  @GET
-	    @Path("/{id}")
-	    public Response getRatingsPredictionById(@PathParam("id") Integer id) throws SQLException {
-	
-		  ArrayList<Integer> tmp = RecommendationSpark.recommendForUserById(id, 10);
-	
-		  return Response.ok(DatabaseUtils.getListSanPhamByListID(tmp)).build();
-		 // return Response.ok(DatabaseUtils.getListSanPhamByListID(new ArrayList<>())).build();
-	    }
-	  
-	  @GET
-	    @Path("/{id}/{numItem}")
-	    public Response getRatingsPredictionById(@PathParam("id") Integer id, @PathParam("numItem") Integer numItem) throws SQLException {
-	       /*ItemRecommendations itemRecommendations = RecommendationRatingData.getItemRecommendations(id);	
-	        if (itemRecommendations != null )
-	            return Response.ok(itemRecommendations).build();
-	        else
-	            return Response.status(Status.NOT_FOUND).build();*/
-	
-		  //WrappedArray tmp = RecommendationSpark.recommendForUserById(id, 10);
-		  if (id == 0)
-		  {
-			  ArrayList<SANPHAM> tmp = DatabaseUtils.getListSanPhamGoiYAnonymous();
-			  return Response.ok(tmp.size()).build();
-			 // return Response.ok(DatabaseUtils.getListSanPhamGoiYAnonymous()).build();
-		  }
-		  else
-		  {
-			  //return Response.ok(DatabaseUtils.getListSanPhamGoiYAnonymous()).build();
-			  ArrayList<Integer> tmp = RecommendationSpark.recommendForUserById(id, numItem);
-			  return Response.ok(DatabaseUtils.getListSanPhamByListID(tmp)).build();
-			 // return Response.ok(DatabaseUtils.getListSanPhamGoiYAnonymous()).build();
-		  }
-		 
-	    }
+		return Response.ok(DatabaseUtils.predictForUserNumItem(id,  numItem)).build();
+		/*
+		if (id == 0) {
+			ArrayList<SANPHAM> tmp = DatabaseUtils.getListSanPhamGoiYAnonymous();
+			return Response.ok(tmp).build();
+			// return Response.ok(DatabaseUtils.getListSanPhamGoiYAnonymous()).build();
+		} else {
+
+			return Response.ok(RecommendationSpark.recommendForUserById(id, numItem)).build();
+			// return Response.ok(DatabaseUtils.getListSanPhamGoiYAnonymous()).build();
+		}*/
+
+	}
 }

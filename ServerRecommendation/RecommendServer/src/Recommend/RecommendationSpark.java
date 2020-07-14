@@ -16,6 +16,7 @@ import org.apache.spark.sql.SparkSession;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import Database.DatabaseUtils;
 import scala.Tuple2;
 import scala.collection.mutable.WrappedArray;
 
@@ -30,6 +31,7 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -73,7 +75,7 @@ public class RecommendationSpark {
 		// loadModel();
 		 loadDatabase();
 		 trainALSModel();
-		 ShareLoopGroup.submit(()-> recommendForAllUserAndCreateCache(maximumItemRecommend));
+		// ShareLoopGroup.submit(()-> recommendForAllUserAndCreateCache(maximumItemRecommend));
 		 //saveModel();
 		 //sc.close();
 	}
@@ -107,7 +109,7 @@ public class RecommendationSpark {
 		DatabaseConfig.initDatabaseConfig();
 		ratingsRDD = spark.read().jdbc(DatabaseConfig.url, DatabaseConfig.tableRating, DatabaseConfig.properties)
 				.javaRDD().map(UserRating::parseRating);
-		
+		System.out.println("Size of rating databasE:" +ratingsRDD.count());
 		
 		// ratingsRDD = spark
        	//	  .read().textFile("Databases/datatest/u.data").javaRDD()
@@ -154,7 +156,7 @@ public class RecommendationSpark {
 		ShareLoopGroup.scheduleWithFixedDelay(()->retrainModel(), 0, 10, TimeUnit.MINUTES, true) ;
 	}
 	
-	public static ArrayList<Integer> recommendForUserById(int id, int numItem)
+	public static ArrayList<SANPHAM> recommendForUserById(int id, int numItem) throws SQLException
 	{
 		if (cacheRecommendResult != null && cacheRecommendResult.containsKey(id))
 		{
@@ -165,14 +167,20 @@ public class RecommendationSpark {
 				int size = Math.min(numItem, listIdsCache.size());
 				for (int i = 0 ; i < size; i++)
 					listIdsCacheReturn.add(listIdsCache.get(i));
-				return listIdsCacheReturn;
+				System.out.println("load cache:" + id + listIdsCacheReturn.size());
+				return DatabaseUtils.getListSanPhamByListID(listIdsCacheReturn);
 			}
 			
 		}
 		
 		ArrayList<Integer> listIdsRecommendations = new ArrayList<>();
-		if (numItem > maximumItemRecommend) return listIdsRecommendations;
+		if (numItem > maximumItemRecommend) return DatabaseUtils.getListSanPhamByListID(listIdsRecommendations);
 		Dataset<Row> userRating  = ratings.select(als.getUserCol()).where(col(als.getUserCol()).equalTo(String.valueOf(id))).distinct().limit(1);
+		if (userRating.count() == 0 || userRating.isEmpty()) 
+			{
+				System.out.println("No Rating:" + userRating.count() + userRating.isEmpty());
+				return DatabaseUtils.getListSanPhamGoiYAnonymous();
+			}
 		Dataset<Row> result = model.recommendForUserSubset(userRating, numItem);
 	
 		List<Row> listIds = result. withColumn("itemId", explode(col("recommendations.itemId"))).select(col("itemId")).collectAsList();
@@ -187,8 +195,9 @@ public class RecommendationSpark {
 		 if (!cacheRecommendResult.containsKey(id))
 			 cacheRecommendResult.put(id, listIdsRecommendations);
 		 
-		 return  listIdsRecommendations;
-		
+		// return  listIdsRecommendations;
+		 System.out.println("Recommend ID" + id + " list recommend" + listIdsRecommendations.size());
+		 return DatabaseUtils.getListSanPhamByListID(listIdsRecommendations);
 	}
 	
 	private static void createCache(Dataset<Row> resultAllUserRecommend)

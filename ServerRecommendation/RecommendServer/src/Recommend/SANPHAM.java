@@ -15,7 +15,7 @@ public class SANPHAM {
 	public String LUOTMUA;
 	public String LUOTTHICH;
 	public String LUOTXEM;
-	public String TENNHANVIEN;
+	public String TENNV;
 	
 	public SANPHAM(String maSP, String tenSP, String giaSP, String khuyenMai, String anhLON, String anhNHO,
 			String thongTIN,
@@ -36,7 +36,7 @@ public class SANPHAM {
 		this.LUOTMUA = luotMUA;
 		this.LUOTXEM = luotXEM;
 		this.LUOTTHICH = luotTHICH;
-		this.TENNHANVIEN = tenNHANVIEN;
+		this.TENNV = tenNHANVIEN;
 	}
 
 }
