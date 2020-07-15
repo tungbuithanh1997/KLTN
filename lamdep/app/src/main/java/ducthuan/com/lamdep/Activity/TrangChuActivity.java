@@ -5,32 +5,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.FrameLayout;
 
-import com.google.android.material.bottomnavigation.BottomNavigationItemView;
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import ducthuan.com.lamdep.Fragment.Fragment_Tab_DanhMuc;
 import ducthuan.com.lamdep.Fragment.Fragment_Tab_TaiKhoan;
-import ducthuan.com.lamdep.Fragment.Fragment_Tab_LamDep;
+import ducthuan.com.lamdep.Fragment.Fragment_Tab_BaiViet;
 import ducthuan.com.lamdep.Fragment.Fragment_Tab_TimKiem;
 import ducthuan.com.lamdep.Fragment.Fragment_Tab_TrangChu;
 import ducthuan.com.lamdep.R;
 
 public class TrangChuActivity extends AppCompatActivity {
 
-   // public static final String base_url = "https://webt2.000webhostapp.com/webt2/";
+    public static final String base_url = "https://webt2.000webhostapp.com/webt2/";
     //public static final String base_url = "http://172.17.16.153/webt2/";//ktx
     //public static final String base_url = "http://10.45.249.198/webt2/";
     //public static final String base_url = "http://172.17.23.52/webt2/";
-    public static final String base_url = "http://192.168.1.5/webt2/";//kem xoi
+    //public static final String base_url = "http://192.168.1.7/webt2/";//kem xoi
     //public static final String base_url = "http://192.168.43.56/webt2/";//quan cafe vk day them
 
     FrameLayout frameLayout_Content;
@@ -87,7 +80,7 @@ public class TrangChuActivity extends AppCompatActivity {
                         seletedFragment = new Fragment_Tab_TimKiem();
                         break;
                     case R.id.itLamDep:
-                        seletedFragment = new Fragment_Tab_LamDep();
+                        seletedFragment = new Fragment_Tab_BaiViet();
                         break;
                     case R.id.itTaiKhoan:
                         seletedFragment = new Fragment_Tab_TaiKhoan();

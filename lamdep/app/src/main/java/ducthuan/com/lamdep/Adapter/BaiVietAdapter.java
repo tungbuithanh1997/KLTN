@@ -16,7 +16,7 @@ import ducthuan.com.lamdep.Activity.TestActivity;
 import ducthuan.com.lamdep.Model.BaiViet;
 import ducthuan.com.lamdep.R;
 
-public class BaiVietAdapter extends RecyclerView.Adapter<BaiVietAdapter.ViewHolder> {
+/*public class BaiVietAdapter extends RecyclerView.Adapter<BaiVietAdapter.ViewHolder> {
 
     Context context;
     ArrayList<BaiViet>baiViets;
@@ -78,4 +78,4 @@ public class BaiVietAdapter extends RecyclerView.Adapter<BaiVietAdapter.ViewHold
         }
     }
 
-}
+}*/

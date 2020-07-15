@@ -1,19 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Activity.TestActivity">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/mauhong"
-        app:title="Bài viết"
-        app:titleTextColor="@color/mautrang" />
+        android:background="@color/mauhong">
+
+        <TextView
+            android:id="@+id/txtMucLuuTru"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:textColor="@color/mautrang"
+            android:textSize="18sp"
+            android:text="Mục lưu trữ"
+            android:gravity="center"
+            android:drawableLeft="@drawable/ic_luutru_white_24dp"
+            android:drawablePadding="10dp"/>
+
+
+    </RelativeLayout>
 
     <TabHost
         android:id="@+id/tabHost"
@@ -41,6 +53,11 @@
                 android:layout_weight="1"/>
         </LinearLayout>
     </TabHost>
+
+
+
+
+
 
 
 </LinearLayout>

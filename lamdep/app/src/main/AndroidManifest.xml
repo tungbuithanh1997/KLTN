@@ -23,7 +23,6 @@
         <activity android:name=".Activity.BaiVietLamDepLuuTruActivity" />
         <activity android:name=".Activity.BaiVietLamDepActivity" />
         <activity android:name=".Activity.DanhSachBaiVietLamDepActivity" />
-        <activity android:name=".Activity.LoaiLamDepActivity" />
         <activity android:name=".Activity.DoanhThuActivity" />
         <activity android:name=".Activity.SuaSanPhamShopCuaToiActivity" />
         <activity android:name=".Activity.DanhGiaCuaToiActivity" />
